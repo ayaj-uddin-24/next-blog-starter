@@ -29,4 +29,18 @@ const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const userController = { createUser, getUsers };
+const getUserByID = async (req: Request, res: Response) => {
+  try {
+    const user = await userService.getUserByID(Number(req.params.id));
+
+    res.status(200).json({
+      success: true,
+      message: "User retrieved successfully!",
+      data: user,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const userController = { createUser, getUsers, getUserByID };

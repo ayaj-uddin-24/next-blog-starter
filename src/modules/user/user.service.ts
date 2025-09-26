@@ -22,9 +22,31 @@ const getUsers = async () => {
       isVerified: true,
       createdAt: true,
       updatedAt: true,
+      posts: true,
     },
   });
   return users;
 };
 
-export const userService = { createUser, getUsers };
+const getUserByID = async (id: number) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      picture: true,
+      status: true,
+      role: true,
+      isVerified: true,
+      createdAt: true,
+      updatedAt: true,
+      posts: true,
+    },
+  });
+
+  return user;
+};
+
+export const userService = { createUser, getUsers, getUserByID };
