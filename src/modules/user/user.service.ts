@@ -49,4 +49,16 @@ const getUserByID = async (id: number) => {
   return user;
 };
 
-export const userService = { createUser, getUsers, getUserByID };
+const updateUser = async (
+  id: number,
+  payload: Prisma.UserUpdateInput
+): Promise<User> => {
+  const user = await prisma.user.update({
+    where: { id },
+    data: payload,
+  });
+
+  return user;
+};
+
+export const userService = { createUser, getUsers, getUserByID, updateUser };
