@@ -28,4 +28,19 @@ const getPosts = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-export const postController = { createPost, getPosts };
+
+const getPostByID = async (req: Request, res: Response) => {
+  try {
+    const post = await postService.getPostByID(Number(req.params.id));
+
+    res.status(201).json({
+      success: true,
+      message: "Post retrieved successfully!",
+      data: post,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const postController = { createPost, getPosts, getPostByID };
