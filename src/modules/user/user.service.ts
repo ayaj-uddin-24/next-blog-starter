@@ -1,6 +1,7 @@
+import { Prisma, User } from "@prisma/client";
 import { prisma } from "../../config/db";
 
-const createUser = async (payload: any) => {
+const createUser = async (payload: Prisma.UserCreateInput): Promise<User> => {
   const newUser = await prisma.user.create({
     data: payload,
   });
@@ -8,4 +9,22 @@ const createUser = async (payload: any) => {
   return newUser;
 };
 
-export const userService = { createUser };
+const getUsers = async () => {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      picture: true,
+      status: true,
+      role: true,
+      isVerified: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  return users;
+};
+
+export const userService = { createUser, getUsers };
