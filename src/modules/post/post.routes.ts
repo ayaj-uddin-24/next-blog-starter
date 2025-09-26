@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", postController.getPosts);
 router.get("/:id", postController.getPostByID);
+router.put("/:id", postController.updatePost);
 router.post("/create", postController.createPost);
 
 export const postRouter = router;

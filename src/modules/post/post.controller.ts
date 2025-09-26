@@ -43,4 +43,18 @@ const getPostByID = async (req: Request, res: Response) => {
   }
 };
 
-export const postController = { createPost, getPosts, getPostByID };
+const updatePost = async (req: Request, res: Response) => {
+  try {
+    const post = await postService.updatePost(Number(req.params.id), req.body);
+
+    res.status(201).json({
+      success: true,
+      message: "Post updated successfully!",
+      data: post,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const postController = { createPost, getPosts, getPostByID, updatePost };

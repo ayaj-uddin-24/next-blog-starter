@@ -39,4 +39,16 @@ const getPostByID = async (id: number) => {
   return post;
 };
 
-export const postService = { createPost, getPosts, getPostByID };
+const updatePost = async (
+  id: number,
+  payload: Prisma.PostUpdateInput
+): Promise<Post> => {
+  const post = await prisma.post.update({
+    where: { id },
+    data: payload,
+  });
+
+  return post;
+};
+
+export const postService = { createPost, getPosts, getPostByID, updatePost };
