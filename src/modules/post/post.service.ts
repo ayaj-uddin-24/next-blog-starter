@@ -41,7 +41,16 @@ const getPosts = async ({
     take: limit,
     where,
   });
-  return post;
+
+  const total = await prisma.post.count({ where });
+
+  return {
+    data: post,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
 const getPostByID = async (id: number) => {
