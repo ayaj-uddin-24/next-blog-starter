@@ -20,7 +20,17 @@ const getPosts = async (req: Request, res: Response) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 5;
     const search = (req.query.search as string) || "";
-    const post = await postService.getPosts({ page, limit, search });
+    const isFeatured = req.query.isFeatured
+      ? req.query.isFeatured == "true"
+      : undefined;
+    const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
+    const post = await postService.getPosts({
+      page,
+      limit,
+      search,
+      isFeatured,
+      tags,
+    });
 
     res.status(201).json({
       success: true,

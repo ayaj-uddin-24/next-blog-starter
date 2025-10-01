@@ -13,39 +13,33 @@ const getPosts = async ({
   page,
   limit,
   search,
+  isFeatured,
+  tags,
 }: {
   page: number;
   limit: number;
   search: string;
+  isFeatured?: boolean;
+  tags?: string[];
 }) => {
   const skip = (page - 1) * limit;
-  const post = await prisma.post.findMany({
-    include: {
-      author: {
-        select: {
-          name: true,
-          email: true,
-        },
+  const where: any = {
+    AND: [
+      search && {
+        OR: [
+          { title: { contains: search, mode: "insensitive" } },
+          { content: { contains: search, mode: "insensitive" } },
+        ],
       },
-    },
+      typeof isFeatured === "boolean" && { isFeatured },
+      tags && tags.length > 0 && { tags: { hasEvery: tags } },
+    ].filter(Boolean),
+  };
+  const post = await prisma.post.findMany({
+    include: { author: { select: { name: true, email: true } } },
     skip,
     take: limit,
-    where: {
-      OR: [
-        {
-          title: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-        {
-          content: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-      ],
-    },
+    where,
   });
   return post;
 };
@@ -53,14 +47,7 @@ const getPosts = async ({
 const getPostByID = async (id: number) => {
   const post = await prisma.post.findUnique({
     where: { id },
-    include: {
-      author: {
-        select: {
-          name: true,
-          email: true,
-        },
-      },
-    },
+    include: { author: { select: { name: true, email: true } } },
   });
 
   return post;
