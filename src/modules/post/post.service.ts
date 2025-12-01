@@ -63,7 +63,7 @@ const getPostByID = async (id: number) => {
 
     return await tx.post.findUnique({
       where: { id: Number(id) },
-      include: { author: { select: { name: true, email: true } } },
+      include: { author: true },
     });
   });
 };
